@@ -1,0 +1,10 @@
+ansible<12
+ansible-compat
+ansible-core
+ansible-lint
+flake8
+molecule==25.*
+molecule-vagrant
+pytest-testinfra
+yamllint
+jmespath

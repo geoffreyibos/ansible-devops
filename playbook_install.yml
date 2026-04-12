@@ -1,0 +1,15 @@
+---
+
+- name: Installation de la base de données mysql
+  hosts: database
+  become: true
+
+- name: Install applicative server
+  hosts: api
+  become: true
+
+- name: Installation de nginx
+  hosts: nginx
+  become: true
+  roles:
+    - { role: geerlingguy.nginx, tags: [ "nginx" ] }

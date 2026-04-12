@@ -1,0 +1,11 @@
+roles/*
+!roles/requirements.yml
+.vagrant
+*.retry
+.virtualenv
+*.pyc
+.idea
+*.iml
+*.iws
+*vault_pass*.txt
+.ansible
