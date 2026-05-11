@@ -1,0 +1,7 @@
+---
+- name: Restart simple api
+  ansible.builtin.systemd:
+    name: simple-api
+    state: restarted
+    daemon_reload: true
+  become: true

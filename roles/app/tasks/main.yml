@@ -1,0 +1,67 @@
+---
+- name: Create application group
+  ansible.builtin.group:
+    name: "{{ app_group }}"
+    state: present
+  become: true
+
+- name: Create application user
+  ansible.builtin.user:
+    name: "{{ app_user }}"
+    group: "{{ app_group }}"
+    shell: /usr/sbin/nologin
+    create_home: false
+    state: present
+  become: true
+
+- name: Create application directory
+  ansible.builtin.file:
+    path: "{{ app_dir }}"
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+    mode: "0755"
+  become: true
+
+- name: Copy Flask application files
+  ansible.builtin.copy:
+    src: simple-api/
+    dest: "{{ app_dir }}/"
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+    mode: "0644"
+  become: true
+  notify: Restart simple api
+
+- name: Create Python virtual environment
+  ansible.builtin.command:
+    cmd: python3 -m venv "{{ app_dir }}/venv"
+    creates: "{{ app_dir }}/venv/bin/python"
+  become: true
+  become_user: "{{ app_user }}"
+
+- name: Install Python dependencies
+  ansible.builtin.pip:
+    requirements: "{{ app_dir }}/requirements.txt"
+    virtualenv: "{{ app_dir }}/venv"
+  become: true
+  become_user: "{{ app_user }}"
+  notify: Restart simple api
+
+- name: Install systemd service
+  ansible.builtin.template:
+    src: simple-api.service.j2
+    dest: /etc/systemd/system/simple-api.service
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  notify: Restart simple api
+
+- name: Ensure application service is enabled and started
+  ansible.builtin.systemd:
+    name: simple-api
+    state: started
+    enabled: true
+    daemon_reload: true
+  become: true

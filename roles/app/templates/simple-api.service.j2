@@ -1,0 +1,17 @@
+[Unit]
+Description=Simple Flask API
+After=network.target postgresql.service
+
+[Service]
+User={{ app_user }}
+Group={{ app_group }}
+WorkingDirectory={{ app_dir }}
+Environment="DB_HOST={{ db_host }}"
+Environment="DB_NAME={{ db_name }}"
+Environment="DB_USER={{ db_user }}"
+Environment="DB_PASSWORD={{ db_password }}"
+ExecStart={{ app_dir }}/venv/bin/gunicorn --bind 127.0.0.1:{{ app_port }} app:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

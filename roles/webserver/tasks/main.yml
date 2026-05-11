@@ -1,0 +1,38 @@
+---
+- name: Install nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+  become: true
+
+- name: Deploy nginx reverse proxy configuration
+  ansible.builtin.template:
+    src: simple-api-nginx.conf.j2
+    dest: /etc/nginx/sites-available/simple-api.conf
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  notify: Restart nginx
+
+- name: Enable nginx site
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/simple-api.conf
+    dest: /etc/nginx/sites-enabled/simple-api.conf
+    state: link
+  become: true
+  notify: Restart nginx
+
+- name: Remove default nginx site
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  become: true
+  notify: Restart nginx
+
+- name: Ensure nginx is enabled and started
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true
+  become: true

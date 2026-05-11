@@ -1,0 +1,51 @@
+---
+- name: Install PostgreSQL
+  ansible.builtin.apt:
+    name:
+      - postgresql
+      - postgresql-contrib
+    state: present
+  become: true
+
+- name: Ensure PostgreSQL service is enabled and started
+  ansible.builtin.service:
+    name: postgresql
+    state: started
+    enabled: true
+  become: true
+
+- name: Create application database user
+  community.postgresql.postgresql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    state: present
+  become: true
+  become_user: postgres
+
+- name: Create application database
+  community.postgresql.postgresql_db:
+    name: "{{ db_name }}"
+    owner: "{{ db_user }}"
+    state: present
+  become: true
+  become_user: postgres
+
+- name: Create users table
+  community.postgresql.postgresql_query:
+    login_db: "{{ db_name }}"
+    query: |
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(100) NOT NULL
+      );
+  become: true
+  become_user: postgres
+
+- name: Ensure application user owns users table and sequence
+  community.postgresql.postgresql_query:
+    login_db: "{{ db_name }}"
+    query: |
+      ALTER TABLE users OWNER TO {{ db_user }};
+      ALTER SEQUENCE users_id_seq OWNER TO {{ db_user }};
+  become: true
+  become_user: postgres
