@@ -1,0 +1,37 @@
+---
+- name: Install backup dependencies
+  ansible.builtin.apt:
+    name:
+      - postgresql-client
+      - tar
+      - gzip
+    state: present
+  become: true
+
+- name: Create backup directory
+  ansible.builtin.file:
+    path: "{{ backup_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0750"
+  become: true
+
+- name: Deploy backup script
+  ansible.builtin.template:
+    src: simple-api-backup.sh.j2
+    dest: /usr/local/bin/simple-api-backup.sh
+    owner: root
+    group: root
+    mode: "0750"
+  become: true
+
+- name: Schedule automatic backup
+  ansible.builtin.cron:
+    name: "Simple API automatic backup"
+    user: root
+    minute: "0"
+    hour: "2"
+    job: "/usr/local/bin/simple-api-backup.sh"
+    state: present
+  become: true

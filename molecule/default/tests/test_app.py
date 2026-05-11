@@ -84,3 +84,24 @@ def test_postfix_is_running(host):
     service = host.service("postfix")
     assert service.is_running
     assert service.is_enabled
+
+
+def test_backup_script_exists(host):
+    backup_script = host.file("/usr/local/bin/simple-api-backup.sh")
+    assert backup_script.exists
+    assert backup_script.mode == 0o750
+
+
+def test_backup_cron_is_configured(host):
+    cron = host.run("sudo crontab -l")
+    assert cron.rc == 0
+    assert "simple-api-backup.sh" in cron.stdout
+
+
+def test_backup_script_runs_successfully(host):
+    result = host.run("sudo /usr/local/bin/simple-api-backup.sh")
+    assert result.rc == 0
+
+    backups = host.run("sudo find /var/backups/simple-api -type f")
+    assert "database_" in backups.stdout
+    assert "app_" in backups.stdout

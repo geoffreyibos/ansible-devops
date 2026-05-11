@@ -11,3 +11,6 @@ db_name: simple_api
 db_user: simple_api_user
 db_host: 127.0.0.1
 environment_name: dev
+
+backup_dir: /var/backups/simple-api
+backup_retention_days: 7
