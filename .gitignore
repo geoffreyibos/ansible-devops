@@ -8,3 +8,4 @@ roles/geerlingguy.*
 *.iws
 *vault_pass*.txt
 .ansible
+.devops_vault_pass.txt

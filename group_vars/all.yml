@@ -9,5 +9,4 @@ nginx_server_name: localhost
 
 db_name: simple_api
 db_user: simple_api_user
-db_password: simple_api_password
 db_host: 127.0.0.1
