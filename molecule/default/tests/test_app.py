@@ -73,3 +73,14 @@ def test_maildev_ports_are_listening(host):
     web = host.socket("tcp://0.0.0.0:1080")
     assert smtp.is_listening
     assert web.is_listening
+
+
+def test_postfix_is_installed(host):
+    package = host.package("postfix")
+    assert package.is_installed
+
+
+def test_postfix_is_running(host):
+    service = host.service("postfix")
+    assert service.is_running
+    assert service.is_enabled

@@ -10,3 +10,4 @@
     - webserver
     - certbot
     - maildev
+    - postfix
