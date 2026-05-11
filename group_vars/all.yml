@@ -1,41 +1,13 @@
 ---
+app_name: simple-api
+app_user: simpleapi
+app_group: simpleapi
+app_dir: /opt/simple-api
+app_port: 5000
 
-# Configuration global au projet
+nginx_server_name: localhost
 
-# NGINX - configuration  du rôle https://github.com/geerlingguy/ansible-role-nginx
-nginx_remove_default_vhost: true
-nginx_worker_processes: "{{ ansible_processor_vcpus | default(ansible_processor_count) }}"
-nginx_worker_connections: "2048"
-nginx_sendfile: "on"
-nginx_tcp_nopush: "on"
-nginx_tcp_nodelay: "on"
-nginx_keepalive_timeout: "5"
-nginx_server_tokens: "off"
-nginx_extra_conf_options: |
-  worker_rlimit_nofile 65000;
-nginx_extra_http_options: |
-  add_header X-Frame-Options SAMEORIGIN;
-  add_header X-Content-Type-Options nosniff;
-  add_header X-XSS-Protection "1; mode=block";
-  log_format upstream_time '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" rt=$request_time uct="$upstream_connect_time" uht="$upstream_header_time" urt="$upstream_response_time"';
-  proxy_cache_path /var/cache/nginx_cache levels=1:2 keys_zone=diskcache:50m inactive=45m max_size=10g;
-  types_hash_max_size 2048;
-  proxy_pass_header X-Accel-Expires;
-  expires -1;
-  server {
-    listen  80 default_server;
-    return 444;
-  }
-
-nginx_vhosts_base:
-  - listen: "8080"
-    server_name: "localhost"
-    extra_parameters: |
-      location /nginx_status {
-          stub_status on;
-          access_log off;
-          allow 127.0.0.1;
-          deny all;
-      }
-
-nginx_vhosts: "{{ nginx_vhosts_base }}"
+db_name: simple_api
+db_user: simple_api_user
+db_password: simple_api_password
+db_host: 127.0.0.1
