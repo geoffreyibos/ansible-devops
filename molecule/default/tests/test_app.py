@@ -60,3 +60,16 @@ def test_api_uses_database(host):
 def test_certbot_is_installed(host):
     package = host.package("certbot")
     assert package.is_installed
+
+
+def test_maildev_service_is_running(host):
+    service = host.service("maildev")
+    assert service.is_running
+    assert service.is_enabled
+
+
+def test_maildev_ports_are_listening(host):
+    smtp = host.socket("tcp://0.0.0.0:1025")
+    web = host.socket("tcp://0.0.0.0:1080")
+    assert smtp.is_listening
+    assert web.is_listening

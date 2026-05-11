@@ -1,0 +1,10 @@
+[Unit]
+Description=Maildev development SMTP server
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/maildev --web 1080 --smtp 1025 --ip 0.0.0.0
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
