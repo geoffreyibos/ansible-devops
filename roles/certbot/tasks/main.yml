@@ -1,0 +1,17 @@
+---
+- name: Install Certbot packages
+  ansible.builtin.apt:
+    name:
+      - certbot
+      - python3-certbot-nginx
+    state: present
+  become: true
+
+- name: Deploy Certbot documentation file
+  ansible.builtin.template:
+    src: certbot-info.txt.j2
+    dest: /etc/certbot-simple-api-info.txt
+    owner: root
+    group: root
+    mode: "0644"
+  become: true

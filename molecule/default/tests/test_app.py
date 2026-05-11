@@ -55,3 +55,8 @@ def test_api_uses_database(host):
     list_response = host.run("curl -s http://127.0.0.1/users")
     assert list_response.rc == 0
     assert "molecule-test" in list_response.stdout
+
+
+def test_certbot_is_installed(host):
+    package = host.package("certbot")
+    assert package.is_installed
