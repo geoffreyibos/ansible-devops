@@ -102,3 +102,35 @@ ansible-vault edit group_vars/devops_dev/vault.yml
 # Consulter un vault
 ansible-vault view group_vars/devops_dev/vault.yml
 ```
+
+# Déploiement automatisé d’une infrastructure Flask avec Ansible
+
+## Description du projet
+
+Ce projet met en place une infrastructure complète automatisée avec Ansible pour déployer une API Flask sur une machine Ubuntu via Molecule, Vagrant et VirtualBox.
+
+L’infrastructure déployée comprend :
+
+- une application Flask exécutée avec systemd ;
+- un reverse proxy nginx ;
+- une base de données PostgreSQL ;
+- des roles Ansible séparés et réutilisables ;
+- des tests Molecule/Testinfra ;
+- une vérification d’idempotence ;
+- une analyse qualité avec ansible-lint et flake8.
+
+Le projet respecte une approche Infrastructure as Code et automatise entièrement le déploiement, la configuration et la validation de l’environnement.
+
+## Membres du binôme
+
+- Oscar DEBEURET
+- Geoffrey IBOS
+
+## Bonus implémentés
+
+- Ansible Vault : chiffrement du mot de passe de base de données.
+- Multi-environnements : variables séparées pour dev, staging et production.
+- Certbot : installation et préparation de la configuration Let's Encrypt.
+- Maildev : serveur SMTP de développement sur les ports 1025 et 1080.
+- Postfix : serveur de mail local configuré en loopback-only.
+- Backup automatisé : dump PostgreSQL, archive applicative, rotation et cron.
