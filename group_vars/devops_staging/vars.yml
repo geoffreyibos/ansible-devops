@@ -1,0 +1,6 @@
+---
+environment_name: staging
+nginx_server_name: staging.local
+app_port: 5000
+db_name: simple_api_staging
+db_user: simple_api_staging_user

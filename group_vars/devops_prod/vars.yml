@@ -1,0 +1,6 @@
+---
+environment_name: production
+nginx_server_name: production.local
+app_port: 5000
+db_name: simple_api_prod
+db_user: simple_api_prod_user
