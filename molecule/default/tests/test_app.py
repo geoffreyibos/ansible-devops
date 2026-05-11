@@ -1,6 +1,5 @@
 import os
 
-import pytest
 import testinfra.utils.ansible_runner
 
 
@@ -42,3 +41,17 @@ def test_users_endpoint(host):
     response = host.run("curl -s http://127.0.0.1/users")
     assert response.rc == 0
     assert response.stdout.strip().startswith("[")
+
+
+def test_api_uses_database(host):
+    create_response = host.run(
+        "curl -s -X POST http://127.0.0.1/users "
+        "-H 'Content-Type: application/json' "
+        "-d '{\"name\":\"molecule-test\"}'"
+    )
+    assert create_response.rc == 0
+    assert "molecule-test" in create_response.stdout
+
+    list_response = host.run("curl -s http://127.0.0.1/users")
+    assert list_response.rc == 0
+    assert "molecule-test" in list_response.stdout

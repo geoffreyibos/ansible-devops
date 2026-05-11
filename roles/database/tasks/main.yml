@@ -40,6 +40,7 @@
       );
   become: true
   become_user: postgres
+  changed_when: false
 
 - name: Ensure application user owns users table and sequence
   community.postgresql.postgresql_query:
@@ -49,3 +50,5 @@
       ALTER SEQUENCE users_id_seq OWNER TO {{ db_user }};
   become: true
   become_user: postgres
+  changed_when: false
+
